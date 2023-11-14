@@ -12,8 +12,6 @@ services:
       - home_server_internal_network
     deploy:
       replicas: 2
-      placement:
-        constraints: [node.role == manager]
 
 networks:
   home_server_internal_network:
