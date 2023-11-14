@@ -157,7 +157,7 @@
       docker_secret:
         name: NEXTCLOUD_PG_PASSWORD
         # data: "{{ lookup('env', 'NEXTCLOUD_PG_PASSWORD')  }}"
-        data: 
+        data: TT2nrQNeNZaMneEvmVqCjp7QC7X
         state: present
 
     - name: Create secret NEXTCLOUD_PG_USER

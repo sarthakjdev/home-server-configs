@@ -6,10 +6,11 @@ services:
     ports:
       - 80:80
       - 443:443
-    # volumes:
-    #   - ./nginx/conf.d:/etc/nginx/conf.d
-    #   - ./ssl:/etc/nginx/ssl:ro
-    #   - ./.htpsswd:/etc/nginx/.htpsswd
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - nextcloud_data:/var/www/html:z
+      - ./ssl:/etc/nginx/ssl:ro
     networks:
       - home_server_internal_network
 

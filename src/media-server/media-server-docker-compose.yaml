@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    user: 1000:1000
+    networks:
+      - home_server_internal_network
+    ports:
+      - 8096:8096
+    volumes:
+      - /home/sarthakjdev/servers/media-server/config:/config
+      - /mnt/hdd0/media:/media
+    environment:
+      - JELLYFIN_PublishedServerUrl=http://cinema.sarthakjdev.com
+
+networks:
+  home_server_internal_network:
+    external: true
