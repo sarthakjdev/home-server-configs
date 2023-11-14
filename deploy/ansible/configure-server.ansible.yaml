@@ -132,8 +132,8 @@
 
     - name: Cloning git repo
       git:
-        repo: https://github.com/sarthakjdev/home-server-setup.git
-        dest: ~/home-server-setup
+        repo: https://github.com/sarthakjdev/home-server-configs.git
+        dest: ~/home-server-configs
         update: true
         clone: true
         single_branch: yes
@@ -157,7 +157,7 @@
       docker_secret:
         name: NEXTCLOUD_PG_PASSWORD
         # data: "{{ lookup('env', 'NEXTCLOUD_PG_PASSWORD')  }}"
-        data: TT2nrQNeNZaMneEvmVqCjp7QC7X
+        data: 
         state: present
 
     - name: Create secret NEXTCLOUD_PG_USER
@@ -184,25 +184,25 @@
         state: present
         name: home_file_server_stack
         compose:
-          - ~/home-server-setup/deploy/file-server/file-server-docker-compose.yaml
+          - ~/home-server-configs/deploy/file-server/file-server-docker-compose.yaml
 
     - name: Deploy monitoring stack
       docker_stack:
         state: present
         name: home_monitoring_stack
         compose:
-          - ~/home-server-setup/deploy/monitoring/monitoring-docker-compose.yaml
+          - ~/home-server-configs/deploy/monitoring/monitoring-docker-compose.yaml
 
     - name: Deploy logging stack
       docker_stack:
         state: present
         name: home_logging_stack
         compose:
-          - ~/home-server-setup/deploy/logging/logging-docker-compose.yaml
+          - ~/home-server-configs/deploy/logging/logging-docker-compose.yaml
 
     - name: Deploy Nginx Reverse Proxy
       docker_stack:
         state: present
         name: home_web_server_stack
         compose:
-          - ~/home-server-setup/deploy/nginx/web-server-docker-compose.yaml
+          - ~/home-server-configs/deploy/nginx/web-server-docker-compose.yaml
