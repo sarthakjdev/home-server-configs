@@ -9,7 +9,7 @@ services:
       - 53:53/tcp
       - 53:53/udp
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints: [node.role == manager]
 
