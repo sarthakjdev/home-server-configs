@@ -139,6 +139,16 @@
         single_branch: yes
         version: master
 
+    - name: Sync SSL Certificate
+      copy:
+        dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert.pem
+        content: "{{ lookup('env', 'CF_SSL_CERT')  }}"
+
+    - name: Sync SSL Certificate
+      copy:
+        dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert-key.pem
+        content: "{{ lookup('env', 'CF_SSL_CERT_KEY')  }}"
+
     - name: Create secret NEXTCLOUD_ADMIN_PASSWORD
       docker_secret:
         name: NEXTCLOUD_ADMIN_PASSWORD
@@ -178,6 +188,13 @@
       docker_network:
         name: home_server_internal_network
         driver: overlay
+
+    - name: Deploy DNS
+      docker_stack:
+        state: present
+        name: home_file_dns_stack
+        compose:
+          - ~/home-server-configs/src/dns/dns-docker-compose.yaml
 
     - name: Deploy file server stack
       docker_stack:
