@@ -10,7 +10,8 @@ services:
       - prometheus-data:/prometheus
     deploy:
       replicas: 2
-    networks: home_server_internal_network
+    networks:
+      - home_server_internal_network
 
   grafana:
     image: prom/prometheus:latest
@@ -21,10 +22,12 @@ services:
       - prometheus-data:/prometheus
     deploy:
       replicas: 2
-    networks: home_server_internal_network
+    networks:
+      - home_server_internal_network
 
 volumes:
   prometheus-data:
+
 
 networks:
   home_server_internal_network:
