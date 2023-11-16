@@ -150,6 +150,8 @@
     #     dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert-key.pem
     #     content: "{{ lookup('env', 'CF_SSL_CERT_KEY')  }}"
 
+    # ! TODO: ensure /home/sarthakjdev/.cloudflared/cert.pem
+
     - name: Create secret NEXTCLOUD_ADMIN_PASSWORD
       docker_secret:
         name: NEXTCLOUD_ADMIN_PASSWORD
