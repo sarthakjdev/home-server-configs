@@ -31,6 +31,7 @@ jobs:
           CF_SSL_CERT: ${{ secrets.CF_SSL_CERT }}
           CF_SSL_CERT_KEY: ${{ secrets.CF_SSL_CERT_KEY }}
           CF_TUNNEL_TOKEN: ${{ secrets.CF_TUNNEL_TOKEN }}
+          CF_TUNNEL_CERT: ${{ secrets.CF_TUNNEL_CERT }}
         run: |
           mkdir ~/.ssh;
           touch ~/.ssh/id_rsa;
