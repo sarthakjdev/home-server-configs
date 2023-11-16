@@ -39,7 +39,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/id_rsa;
           echo "" >> ~/.ssh/id_rsa;
           chmod 600 ~/.ssh/id_rsa;
-          ansible-playbook ./deploy/ansible/configure-vm.ansible.yaml -i "server.sarthakjdev.com," --private-key=~/.ssh/id_rsa --user=creatorconnect --extra-vars '{"DOCKER_PASSWORD":"${{ secrets.DOCKER_PASSWORD }}"}'
+          ansible-playbook ./deploy/ansible/configure-server.ansible.yaml -i "server.sarthakjdev.com," --private-key=~/.ssh/id_rsa --user=creatorconnect --extra-vars '{"DOCKER_PASSWORD":"${{ secrets.DOCKER_PASSWORD }}"}'
           echo $?
           echo "EXIT CODE ABOVE"
 
