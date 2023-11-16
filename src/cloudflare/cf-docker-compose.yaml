@@ -7,11 +7,13 @@ services:
       - CF_TUNNEL_TOKEN
     command: tunnel --credentials-file /run/secrets/CF_TUNNEL_TOKEN run home-server-tunnel
     volumes:
-      - /home/sarthakjdev/.cloudflared/cert.pem:~/.cloudflared/cert.pem
+      - /home/sarthakjdev/.cloudflared/cert.pem:/root/.cloudflared/cert.pem
     deploy:
       replicas: 2
     networks:
       - home_server_internal_network
+    environment:
+      - TUNNEL_ORIGIN_CERT=~/.cloudflared/cert.pem
 
 secrets:
   CF_TUNNEL_TOKEN:
