@@ -157,6 +157,12 @@
         data: CibBJafEU2N2R5RvZGFDyoDqLMy
         state: present
 
+    - name: Create secret CF_TUNNEL_TOKEN
+      docker_secret:
+        name: NEXTCLOUD_ADMIN_PASSWORD
+        data: "{{ lookup('env', 'CF_TUNNEL_TOKEN')  }}"
+        state: present
+
     - name: Create secret NEXTCLOUD_ADMIN_USER
       docker_secret:
         name: NEXTCLOUD_ADMIN_USER

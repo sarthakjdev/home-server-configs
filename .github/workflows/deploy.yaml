@@ -30,6 +30,7 @@ jobs:
           NEXTCLOUD_PG_DB: ${{ secrets.NEXTCLOUD_PG_DB }}
           CF_SSL_CERT: ${{ secrets.CF_SSL_CERT }}
           CF_SSL_CERT_KEY: ${{ secrets.CF_SSL_CERT_KEY }}
+          CF_TUNNEL_TOKEN: ${{ secrets.CF_TUNNEL_TOKEN }}
         run: |
           mkdir ~/.ssh;
           touch ~/.ssh/id_rsa;
