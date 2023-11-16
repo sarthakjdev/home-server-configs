@@ -1,0 +1,21 @@
+tunnel: b26ffc22-82d0-4fa5-aa2f-eb13c617cec6
+credentials-file: ~/.cloudflared/home-server-tunnel.json
+
+ingress:
+  - hostname: cloud.sarthakjdev.com
+    service: https://localhost:443
+    originRequest:
+      connectTimeout: 10s
+      noTLSVerify: true
+
+  - hostname: cinema.sarthakjdev.com
+    service: https://localhost:443
+    originRequest:
+      connectTimeout: 10s
+      noTLSVerify: true
+
+  - hostname: ssh.sarthakjdev.com
+    service: ssh://localhost:22
+
+  # Fallback rule
+  - service: http_status:404
