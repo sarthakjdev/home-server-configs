@@ -150,6 +150,31 @@
     #     dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert-key.pem
     #     content: "{{ lookup('env', 'CF_SSL_CERT_KEY')  }}"
 
+      - name: Create ~/.cloudflared
+        become: true
+        file:
+          path: "/home/{{ lookup('env', 'USER') }}/.cloudflared"
+          state: directory
+          mode: '0755'
+          owner: '65532'
+          group: '65532'
+
+      - name: Ensure cloudtunnel cert.pem file
+        copy: 
+          content: "{{ lookup('env', 'CF_TUNNEL_CERT')  }}"
+          dest: '~/.cloudflared/cert.pem'
+
+      - name: Ensure cloudtunnel home-server-tunnel.json file (credential file)
+        copy: 
+          content: "{{ lookup('env', 'CF_TUNNEL_TOKEN')  }}"
+          dest: '~/.cloudflared/home-server-tunnel.json'
+
+      - name: Upload the docker-compose file
+      copy:
+        src: '../docker/docker-compose.yaml'
+        dest: '~/backend/'
+          
+
     # ! TODO: ensure /home/sarthakjdev/.cloudflared/cert.pem
 
     - name: Create secret NEXTCLOUD_ADMIN_PASSWORD

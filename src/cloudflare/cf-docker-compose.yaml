@@ -8,6 +8,8 @@ services:
     command: tunnel --credentials-file /run/secrets/CF_TUNNEL_TOKEN run home-server-tunnel
     volumes:
       - /home/sarthakjdev/.cloudflared/cert.pem:/home/nonroot/.cloudflared/cert.pem:rw
+      - /home/sarthakjdev/.cloudflared/config.yaml:/home/nonroot/.cloudflared/config.yaml:rw
+      - /home/sarthakjdev/.cloudflared/home-server-tunnel.json:/home/nonroot/.cloudflared/home-server-tunnel.json:rw
     deploy:
       replicas: 2
     networks:

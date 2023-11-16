@@ -32,6 +32,7 @@ jobs:
           CF_SSL_CERT_KEY: ${{ secrets.CF_SSL_CERT_KEY }}
           CF_TUNNEL_TOKEN: ${{ secrets.CF_TUNNEL_TOKEN }}
           CF_TUNNEL_CERT: ${{ secrets.CF_TUNNEL_CERT }}
+          CF_TUNNEL_ID: ${{ secrets.CF_TUNNEL_ID }}
         run: |
           mkdir ~/.ssh;
           touch ~/.ssh/id_rsa;
@@ -55,6 +56,6 @@ jobs:
         uses: tsickert/discord-webhook@v5.3.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          embed-title: "🟢 MASTER BRANCH BACKEND DEPLOYMENT SUCCESS"
+          embed-title: "🟢 [HOME SERVER SERVICES] MASTER BRANCH DEPLOYMENT SUCCESS"
           embed-color: "#a855f7"
-          embed-description: "Backend Deployed on master!!"
+          embed-description: "Home server configs deployed synced!!"
