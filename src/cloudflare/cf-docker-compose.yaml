@@ -16,6 +16,8 @@ services:
       - home_server_internal_network
     environment:
       - TUNNEL_ORIGIN_CERT=~/.cloudflared/cert.pem
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 secrets:
   CF_TUNNEL_TOKEN:

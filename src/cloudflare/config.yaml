@@ -14,8 +14,8 @@ ingress:
       connectTimeout: 10s
       noTLSVerify: true
 
-  - hostname: ssh.sarthakjdev.com
-    service: ssh://localhost:22
+  - hostname: server.sarthakjdev.com
+    service: ssh://host.docker.internal:22
 
   # Fallback rule
   - service: http_status:404
