@@ -13,7 +13,7 @@ services:
     networks:
       - home_server_internal_network
     environment:
-      - TUNNEL_ORIGIN_CERT=~/.cloudflared/cert.pem
+      - TUNNEL_ORIGIN_CERT=~/.cloudflared/cert.pem:ro
 
 secrets:
   CF_TUNNEL_TOKEN:
