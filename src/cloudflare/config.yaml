@@ -3,13 +3,13 @@ credentials-file: ~/.cloudflared/home-server-tunnel.json
 
 ingress:
   - hostname: cloud.sarthakjdev.com
-    service: https://home_web_server_stack_nginx:443
+    service: http://home_web_server_stack_nginx:80
     originRequest:
       connectTimeout: 10s
       noTLSVerify: true
 
   - hostname: cinema.sarthakjdev.com
-    service: https://home_web_server_stack_nginx:443
+    service: http://home_web_server_stack_nginx:80
     originRequest:
       connectTimeout: 10s
       noTLSVerify: true
