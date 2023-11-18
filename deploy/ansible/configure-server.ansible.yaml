@@ -120,6 +120,12 @@
         username: sarthakjdev
         password: "{{ DOCKER_PASSWORD }}"
 
+    - name: Setup docker daemon to use fluentd docker driver
+      become: yes
+      copy:
+        content: "{{ lookup('file', '../../docker-daemon.json')  }}"
+        dest: /etc/docker/daemon.json
+
     - name: Check if Docker Swarm is initialized
       command: docker info --format "{{'{{'}}.Swarm.LocalNodeState{{'}}'}}"
       register: docker_swarm_status
@@ -140,48 +146,42 @@
         version: master
         force: yes
 
-    # - name: Sync SSL Certificate
-    #   copy:
-    #     dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert.pem
-    #     content: "{{ lookup('env', 'CF_SSL_CERT')  }}"
-
-    # - name: Sync SSL Certificate
-    #   copy:
-    #     dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert-key.pem
-    #     content: "{{ lookup('env', 'CF_SSL_CERT_KEY')  }}"
-
-      - name: Create ~/.cloudflared
-        become: true
-        file:
-          path: "/home/{{ lookup('env', 'USER') }}/.cloudflared"
-          state: directory
-          mode: '0755'
-          owner: '65532'
-          group: '65532'
-
-      - name: Ensure cloudtunnel cert.pem file
-        copy: 
-          content: "{{ lookup('env', 'CF_TUNNEL_CERT')  }}"
-          dest: '~/.cloudflared/cert.pem'
-
-      - name: Ensure cloudtunnel home-server-tunnel.json file (credential file)
-        copy: 
-          content: "{{ lookup('env', 'CF_TUNNEL_TOKEN')  }}"
-          dest: '~/.cloudflared/home-server-tunnel.json'
-
-      - name: Upload the docker-compose file
+    - name: Sync SSL Certificate
       copy:
-        src: '../docker/docker-compose.yaml'
-        dest: '~/backend/'
-          
+        dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert.pem
+        content: "{{ lookup('env', 'CF_SSL_CERT')  }}"
 
-    # ! TODO: ensure /home/sarthakjdev/.cloudflared/cert.pem
+    - name: Sync SSL Certificate
+      copy:
+        dest: ~/home-server-configs/src/nginx/ssl/cloudflare-origin-cert-key.pem
+        content: "{{ lookup('env', 'CF_SSL_CERT_KEY')  }}"
+
+    - name: Ensure cloudflared directory
+      become: true
+      file:
+        path: "/home/sarthakjdev/.cloudflared"
+        state: directory
+        mode: "0755"
+        owner: "65532"
+        group: "65532"
+
+    - name: Ensure cloudtunnel cert.pem file
+      copy:
+        content: "{{ lookup('env', 'CF_TUNNEL_CERT')  }}"
+        dest: "~/.cloudflared/cert.pem"
+    - name: Ensure cloudtunnel home-server-tunnel.json file (credential file)
+      copy:
+        content: "{{ lookup('env', 'CF_TUNNEL_TOKEN')  }}"
+        dest: "~/.cloudflared/home-server-tunnel.json"
+    - name: Upload the docker-compose file
+      copy:
+        src: "../docker/docker-compose.yaml"
+        dest: "~/backend/"
 
     - name: Create secret NEXTCLOUD_ADMIN_PASSWORD
       docker_secret:
         name: NEXTCLOUD_ADMIN_PASSWORD
-        # data: "{{ lookup('env', 'NEXTCLOUD_ADMIN_PASSWORD')  }}"
-        data: CibBJafEU2N2R5RvZGFDyoDqLMy
+        data: "{{ lookup('env', 'NEXTCLOUD_ADMIN_PASSWORD')  }}"
         state: present
 
     - name: Create secret CF_TUNNEL_TOKEN
@@ -193,29 +193,25 @@
     - name: Create secret NEXTCLOUD_ADMIN_USER
       docker_secret:
         name: NEXTCLOUD_ADMIN_USER
-        # data: "{{ lookup('env', 'NEXTCLOUD_ADMIN_USER')  }}"
-        data: sarthakjdev
+        data: "{{ lookup('env', 'NEXTCLOUD_ADMIN_USER')  }}"
         state: present
 
     - name: Create secret NEXTCLOUD_PG_PASSWORD
       docker_secret:
         name: NEXTCLOUD_PG_PASSWORD
-        # data: "{{ lookup('env', 'NEXTCLOUD_PG_PASSWORD')  }}"
-        data: TT2nrQNeNZaMneEvmVqCjp7QC7X
+        data: "{{ lookup('env', 'NEXTCLOUD_PG_PASSWORD')  }}"
         state: present
 
     - name: Create secret NEXTCLOUD_PG_USER
       docker_secret:
         name: NEXTCLOUD_PG_USER
-        # data: "{{ lookup('env', 'NEXTCLOUD_PG_USER')  }}"
-        data: nextcloud
+        data: "{{ lookup('env', 'NEXTCLOUD_PG_USER')  }}"
         state: present
 
     - name: Create secret NEXTCLOUD_PG_DB
       docker_secret:
         name: NEXTCLOUD_PG_DB
-        # data: "{{ lookup('env', 'NEXTCLOUD_PG_DB')  }}"
-        data: nextcloud_db
+        data: "{{ lookup('env', 'NEXTCLOUD_PG_DB')  }}"
         state: present
 
     - name: Create a network with driver options
@@ -226,16 +222,44 @@
     - name: Deploy DNS
       docker_stack:
         state: present
-        name: home_file_dns_stack
+        name: home_server_dns_stack
         compose:
           - ~/home-server-configs/src/dns/dns-docker-compose.yaml
 
-    # - name: Deploy file server stack
-    #   docker_stack:
-    #     state: present
-    #     name: home_file_server_stack
-    #     compose:
-    #       - ~/home-server-configs/src/file-server/file-server-docker-compose.yaml
+    - name: Deploy file server stack
+      docker_stack:
+        state: present
+        name: home_file_server_stack
+        compose:
+          - ~/home-server-configs/src/file-server/file-server-docker-compose.yaml
+
+    - name: Deploy media server stack
+      docker_stack:
+        state: present
+        name: home_media_server_stack
+        compose:
+          - ~/home-server-configs/src/monitoring/monitoring-docker-compose.yaml
+
+    - name: Deploy logging stack
+      docker_stack:
+        state: present
+        name: home_logging_stack
+        compose:
+          - ~/home-server-configs/src/logging/logging-docker-compose.yaml
+
+    - name: Deploy Nginx Reverse Proxy
+      docker_stack:
+        state: present
+        name: home_web_server_stack
+        compose:
+          - ~/home-server-configs/src/nginx/web-server-docker-compose.yaml
+
+    - name: Deploy Cloudflare tunnel stack
+      docker_stack:
+        state: present
+        name: home_server_cf_stack
+        compose:
+          - ~/home-server-configs/src/cloudflare/cf-docker-compose.yaml
 
     # - name: Deploy monitoring stack
     #   docker_stack:
@@ -243,17 +267,3 @@
     #     name: home_monitoring_stack
     #     compose:
     #       - ~/home-server-configs/src/monitoring/monitoring-docker-compose.yaml
-
-    # - name: Deploy logging stack
-    #   docker_stack:
-    #     state: present
-    #     name: home_logging_stack
-    #     compose:
-    #       - ~/home-server-configs/src/logging/logging-docker-compose.yaml
-
-    # - name: Deploy Nginx Reverse Proxy
-    #   docker_stack:
-    #     state: present
-    #     name: home_web_server_stack
-    #     compose:
-    #       - ~/home-server-configs/src/nginx/web-server-docker-compose.yaml
