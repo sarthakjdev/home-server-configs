@@ -62,7 +62,7 @@ jobs:
           CF_TUNNEL_CERT: ${{ secrets.CF_TUNNEL_CERT }}
           CF_TUNNEL_ID: ${{ secrets.CF_TUNNEL_ID }}
         run: |
-          mkdir ~/.ssh;
+          mkdir -p ~/.ssh;
           touch ~/.ssh/id_rsa;
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/id_rsa;
           echo "" >> ~/.ssh/id_rsa;
