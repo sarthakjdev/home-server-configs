@@ -38,13 +38,6 @@ jobs:
           echo "${{ secrets.CF_TUNNEL_TOKEN }}" >> ~/.cloudflared/home-server-tunnel.json;
           echo "" >> ~/.cloudflared/home-server-tunnel.json;
 
-          touch ~/.ssh/config;
-          echo "Host server
-          HostName ${{ secrets.SERVER_HOSTNAME }}
-          ProxyCommand cloudflared access ssh --hostname %h
-          User sarthakjdev" >> ~/.ssh/config;
-          echo "" >> ~/.ssh/config;
-
           echo $?
           echo "EXIT CODE ABOVE"
 
@@ -67,7 +60,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/id_rsa;
           echo "" >> ~/.ssh/id_rsa;
           chmod 600 ~/.ssh/id_rsa;
-          ansible-playbook ./deploy/ansible/configure-server.ansible.yaml -i "${{ secrets.SERVER_HOSTNAME }}," --private-key=~/.ssh/id_rsa --user=sarthakjdev --extra-vars '{"DOCKER_PASSWORD":"${{ secrets.DOCKER_PASSWORD }}"}' --ssh-common-args='-o ProxyCommand="cloudflared access ssh --hostname %h"'
+          ansible-playbook ./deploy/ansible/configure-server.ansible.yaml -i "${{ secrets.SERVER_HOSTNAME }}," --private-key=~/.ssh/id_rsa --user=sarthakjdev --extra-vars '{"DOCKER_PASSWORD":"${{ secrets.DOCKER_PASSWORD }}","ansible_sudo_pass":"${{ secrets.DOCKER_PASSWORD }}"}' --ssh-common-args='-o ProxyCommand="cloudflared access ssh --hostname %h"'
           echo $?
           echo "EXIT CODE ABOVE"
 
