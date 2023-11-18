@@ -14,14 +14,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Ansible
-        id: install-ansible
+      - name: Install required packages
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible
+          sudo apt-get -y update
+          sudo apt-get install -y ansible cloudflared
 
       - name: Install Ansible roles
         run: ansible-galaxy install fubarhouse.golang
+
+      - name: Setup cloudflared
+        run: |
+          mkdir -p ~/.cloudflared;
+          mkdir -p ~/.ssh;
+
+          touch ~/.cloudflared/cert.pem;
+          echo "${{ secrets.CF_TUNNEL_CERT }}" >> ~/.cloudflared/cert.pem;
+          echo "" >> ~/.cloudflared/cert.pem;
+
+          touch ~/.cloudflared/cert.pem;
+          echo "${{ secrets.CF_TUNNEL_TOKEN }}" >> ~/.cloudflared/home-server-tunnel.json;
+          echo "" >> ~/.cloudflared/home-server-tunnel.json;
+
+          touch ~/.ssh/config;
+          echo "Host server
+          HostName ${{ secrets.SERVER_HOSTNAME }}
+          ProxyCommand cloudflared access ssh --hostname %h
+          User sarthakjdev" >> ~/.ssh/config;
+          echo "" >> ~/.ssh/config;
+
+          echo $?
+          echo "EXIT CODE ABOVE"
 
       - name: Configuring VM
         env:
