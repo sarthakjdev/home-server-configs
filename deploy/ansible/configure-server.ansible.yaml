@@ -240,6 +240,9 @@
         compose:
           - ~/home-server-configs/src/monitoring/monitoring-docker-compose.yaml
 
+
+  # ! TODO: build the fluentd with ealstisearch plugin image here
+
     - name: Deploy logging stack
       docker_stack:
         state: present

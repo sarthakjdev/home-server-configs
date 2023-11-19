@@ -14,10 +14,7 @@ services:
       - home_server_internal_network
 
   fluentd:
-    image: fluent/fluentd:latest
-    build:
-      context: ./fluentd
-      dockerfile: Dockerfile
+    image: fluentd-elastisearch:local-latest
     volumes:
       - ./fluentd/fluentd.conf:/fluentd/etc/fluent.conf
       - fluentd_data:/fluentd/log
