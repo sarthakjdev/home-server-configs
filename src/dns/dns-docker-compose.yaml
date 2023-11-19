@@ -8,9 +8,11 @@ services:
     ports:
       - 53:53/tcp
       - 53:53/udp
+    deploy:
+      replicas: 2
     networks:
       - home_server_internal_network
 
 networks:
-  home_server_internal_network: 
+  home_server_internal_network:
     external: true

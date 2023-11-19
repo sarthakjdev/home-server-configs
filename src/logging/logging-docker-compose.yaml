@@ -7,7 +7,9 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
     ports:
-      - "9200:9200"
+      - 9200:9200
+    deploy:
+      replicas: 2
     networks:
       - home_server_internal_network
 
@@ -19,9 +21,11 @@ services:
     volumes:
       - ./fluentd/fluentd.conf:/fluentd/etc/fluent.conf
       - fluentd_data:/fluentd/log
+    deploy:
+      replicas: 2
     ports:
-      - "24224:24224"
-      - "24224:24224/udp"
+      - 24224:24224
+      - 24224:24224/udp
     networks:
       - home_server_internal_network
 
@@ -29,6 +33,8 @@ services:
     image: docker.elastic.co/kibana/kibana:7.13.1
     ports:
       - 5601:5601
+    deploy:
+      replicas: 2
     networks:
       - home_server_internal_network
 

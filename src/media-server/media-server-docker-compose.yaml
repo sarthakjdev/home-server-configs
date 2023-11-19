@@ -10,6 +10,8 @@ services:
     volumes:
       - /home/sarthakjdev/servers/media-server/config:/config
       - /mnt/hdd0/media:/media
+    deploy:
+      replicas: 3
     environment:
       - PUID=1000
       - PGID=1000
