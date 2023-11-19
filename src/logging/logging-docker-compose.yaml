@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    image: elasticsearch:8.11.1
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -14,7 +14,7 @@ services:
       - home_server_internal_network
 
   fluentd:
-    image: fluentd-elastisearch:local-latest
+    image: govtechsg/fluentd-elasticsearch
     volumes:
       - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
       - fluentd_data:/fluentd/log
@@ -23,11 +23,14 @@ services:
     ports:
       - 24224:24224
       - 24224:24224/udp
+    environment:
+      - LOGSTASH_PREFIX=fluentd
+      - ELASTIC_HOST=home_server_logging_stack_elasticsearch:9200
     networks:
       - home_server_internal_network
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.13.1
+    image: kibana:8.11.1
     ports:
       - 5601:5601
     deploy:
