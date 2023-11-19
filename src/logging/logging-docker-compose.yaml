@@ -6,8 +6,6 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-    expose:
-      - "9200"
     ports:
       - "9200:9200"
     networks:
@@ -19,7 +17,7 @@ services:
       context: ./fluentd
       dockerfile: Dockerfile
     volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluentd.conf:/fluentd/etc/fluent.conf
       - fluentd_data:/fluentd/log
     ports:
       - "24224:24224"

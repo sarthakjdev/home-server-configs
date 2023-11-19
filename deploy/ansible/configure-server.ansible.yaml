@@ -243,7 +243,7 @@
     - name: Deploy logging stack
       docker_stack:
         state: present
-        name: home_logging_stack
+        name: home_server_logging_stack
         compose:
           - ~/home-server-configs/src/logging/logging-docker-compose.yaml
 

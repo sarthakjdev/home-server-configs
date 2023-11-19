@@ -5,18 +5,19 @@ on:
 
 jobs:
   ping-server:
+    environment: "production"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: ping-server
-        run: ping ${{ secrets.SERVER_IP_ADDRESS }}
+        run: ping ${{ secrets.SERVER_HOSTNAME }}
 
       - name: Host Down Alert
-        uses: rjstone/discord-webhook-notify@v1
+        uses: tsickert/discord-webhook@v5.3.0
         if: ${{ failure() }}
         with:
-          severity: warn
-          details: Test Cancelled!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embed-title: "🚨🚨🚨 [HOME SERVER SERVICES] HOME SERVER DOWN"
+          embed-description: "Home server is down!!"
