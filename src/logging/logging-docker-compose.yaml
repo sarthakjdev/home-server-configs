@@ -5,11 +5,10 @@ services:
     image: elasticsearch:8.11.1
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=v88kJbWj79hqCLfooNEgbjATTfP
     ports:
       - 9200:9200
-    deploy:
-      replicas: 2
     networks:
       - home_server_internal_network
 
@@ -26,6 +25,8 @@ services:
     environment:
       - LOGSTASH_PREFIX=fluentd
       - ELASTIC_HOST=home_server_logging_stack_elasticsearch:9200
+      - ELASTIC_PASSWORD=v88kJbWj79hqCLfooNEgbjATTfP
+      - ELASTIC_USER=elastic
     networks:
       - home_server_internal_network
 
@@ -35,6 +36,11 @@ services:
       - 5601:5601
     deploy:
       replicas: 2
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=v88kJbWj79hqCLfooNEgbjATTfP
+    # secrets:
+    #   - ELASTICSEARCH_PASSWORD
     networks:
       - home_server_internal_network
 
@@ -44,3 +50,6 @@ networks:
 
 volumes:
   fluentd_data:
+# secrets:
+#   ELASTICSEARCH_PASSWORD:
+#     external: true
