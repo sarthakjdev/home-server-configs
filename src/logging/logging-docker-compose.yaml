@@ -16,7 +16,7 @@ services:
   fluentd:
     image: fluentd-elastisearch:local-latest
     volumes:
-      - ./fluentd/fluentd.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
       - fluentd_data:/fluentd/log
     deploy:
       replicas: 2
